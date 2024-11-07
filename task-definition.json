@@ -1,0 +1,86 @@
+{
+    "executionRoleArn": "arn:aws:iam::[ACCOUNT_ID]:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/[ProjectName]-task-definition",
+            "awslogs-region": "ap-southeast-1",
+            "awslogs-stream-prefix": "ecs"
+          }
+        },
+        "portMappings": [
+          {
+            "hostPort": 8083,
+            "protocol": "tcp",
+            "containerPort": 8083
+          }
+        ],
+        "cpu": 0,
+        "environment": [{            
+          "name": "APP_ENV",
+          "value": "development"            
+      }],        
+        "mountPoints": [],
+        "volumesFrom": [],
+        "image": "[ACCOUNT_ID].dkr.ecr.ap-southeast-1.amazonaws.com/[ProjectName]:latest",
+        "name": "[ProjectName]-container",
+        "secrets": [
+          {
+            "name": "DEAR_PASSWORD",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/DEAR_PASSWORD"
+          },
+          {
+            "name": "DB_PASSWORD_PROD",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/DB_PASSWORD_PROD"
+          },
+          {
+            "name": "DB_PASSWORD_STAGE",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/DB_PASSWORD_STAGE"
+          },
+          {
+            "name": "DB_URL_DEV",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/DB_URL_DEV"
+          },
+          {
+            "name": "DB_URL_PROD",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/DB_URL_PROD"
+          },
+          {
+            "name": "DB_URL_STAGE",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/DB_URL_STAGE"
+          },
+          {
+            "name": "DB_USERNAME_PROD",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/DB_USERNAME_PROD"
+          },
+          {
+            "name": "DB_USERNAME_STAGE",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/DB_USERNAME_STAGE"
+          },
+          {
+            "name": "SES_USERNAME",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/SES_USERNAME"
+          },
+          {
+            "name": "SES_PASSWORD",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/SES_PASSWORD"
+          },
+          {
+            "name": "SES_HOST",
+            "valueFrom": "arn:aws:ssm:ap-southeast-1:[ACCOUNT_ID]:parameter/SES_HOST"
+          }
+        ]
+      }
+    ],
+    "placementConstraints": [],
+    "memory": "512",
+    "taskRoleArn": "arn:aws:iam::[ACCOUNT_ID]:role/ecsTaskExecutionRole",
+    "family": "[ProjectName]-task-definition",
+    "requiresCompatibilities": ["FARGATE"],
+    "networkMode": "awsvpc",
+    "cpu": "256",
+    "volumes": []
+  }
+  

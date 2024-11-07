@@ -1,0 +1,11 @@
+app:
+  HTTP_PORT: 8083
+  url:
+    SNP_BE: http://localhost:8080
+  dear_header:
+    Content-Type: application/json
+    api-auth-accountid: your-account-id
+    api-auth-applicationkey: your-application-id
+  BE_header:
+    Content-Type: application/json
+    Authorization: Basic your_token

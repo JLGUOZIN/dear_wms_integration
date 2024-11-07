@@ -1,0 +1,30 @@
+image: golang
+
+options:
+  docker: true
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Generate AWS ECR Login Script
+          image: atlassian/pipelines-awscli:latest
+          script:
+            - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+            - docker build -t [ProjectName] .
+            - docker tag [ProjectName]:latest [ACCOUNT_ID].dkr.ecr.ap-southeast-1.amazonaws.com/[ProjectName]:latest
+            - docker push [ACCOUNT_ID].dkr.ecr.ap-southeast-1.amazonaws.com/[ProjectName]:latest
+            - aws ecs register-task-definition --cli-input-json file://task-definition-prod.json
+            - aws ecs update-service --service [ProjectName]-service --cluster [ProjectName]-cluster --task-definition [ProjectName]-task-definition
+    
+    development:
+      - step:
+          name: Generate AWS ECR Login Script
+          image: atlassian/pipelines-awscli:latest
+          script:
+            - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+            - docker build -t [ProjectName] .
+            - docker tag [ProjectName]:latest [ACCOUNT_ID].dkr.ecr.ap-southeast-1.amazonaws.com/[ProjectName]:latest
+            - docker push [ACCOUNT_ID].dkr.ecr.ap-southeast-1.amazonaws.com/snpgolangdev:latest
+            - aws ecs register-task-definition --cli-input-json file://task-definition.json
+            - aws ecs update-service --service [ProjectName]-service --cluster [ProjectName]-cluster --task-definition [ProjectName]-task-definition
