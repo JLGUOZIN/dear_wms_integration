@@ -25,7 +25,7 @@ func syncStockToBE(imsRequest []ImsRequest) {
 	json.NewEncoder(reqBodyBytes).Encode(imsRequest)
 	fmt.Println(imsRequest)
 
-	req, err := http.NewRequest("POST", viper.GetString("app.url.SNP_BE")+"/api/v1/ims/updateStock", bytes.NewBuffer(reqBodyBytes.Bytes()))
+	req, err := http.NewRequest("POST", viper.GetString("app.url.BE")+"/api/v1/ims/updateStock", bytes.NewBuffer(reqBodyBytes.Bytes()))
 	req.Header = http.Header{
 		"Content-Type":  []string{"application/json"},
 		"Authorization": []string{"Basic your_token"},
